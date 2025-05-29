@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rocket Boys | Watch All Episodes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #0f172a, #1e293b);
+      color: white;
+    }
+    .episode-card:hover .play-icon {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .modal-enter {
+      animation: modalEnter 0.3s ease-out forwards;
+    }
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="w-full h-64 bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.ottplay.com/articles/2022q1/Will_there_be_Rocket_OTTplay_news_cover_image_1_971.jpeg');">
+    <h1 class="text-4xl font-bold bg-black bg-opacity-50 px-6 py-2 rounded">🚀 Rocket Boys</h1>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+      <button onclick="loadSeason(1)" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white mr-2">Season 1</button>
+      <button onclick="loadSeason(2)" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white">Season 2</button>
+    </div>
+    <div id="episode-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <div class="bg-gray-800 p-4 rounded-lg w-full max-w-4xl relative modal-enter">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+      <video id="modal-video" class="w-full rounded" controls poster="https://i.imgur.com/I9b8D7p.jpg"></video>
+    </div>
+  </div>
+
+  <script>
+    const episodes = {
+      1: [
+        { url: "https://scvo.baugherhatchp.sbs:443/v4/m9/vyvtf/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocketboysmain_landscape_image.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/305e7a8bb563a301da4d6aa572516e2e.mp4?Expires=1749632038&Signature=lAhWceWWaYmG6Zq1Of6yzyhQcWpj7YqBxMrdvc0GiIxSSgbwXwYjQxiqLl4Xscpqs~g89cxRvr6EB5azQHa6Mu4ba8oeweDpZWrVxv4naTX9ISHsDSFLcRgnHCn5jGy99em4veribG9C0llMEOTQ0mD9BuS970swmCaMk0-34h6YOOmnlqFfxzUPM6sxylNFfNc9SDAdn6LF-gpxBO-Pl6PprlmIRrNkPaFJc6eirB3Hi~t4FXzDXs5JB7fq2D3dF9m8XVk7RqWruDzz3MtXI0NDBIvsoQZFJ9n1scdw7Y6O686Fuqw2vU-yEeUcVKREoxzbBoGsJ3Tu57fQrDOwXA__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep02_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...3.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep03_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...4.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep04_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...5.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep05_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...6.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep06_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...7.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep07_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...8.m3u8", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep08_Landscape_Thumb.jpg?h=398&w=708&q=high" }
+      ],
+      2: [
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...9.m3u8", poster: "https://images.slivcdn.com/videoasset_images/blitz_assets/1000213610/thumbnail/1734512121828_rocket_boys_preview_17dec_landscape_thumb_1920x1080.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...10.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_2_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...11.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_3_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...12.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_4_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...13.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_5_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...14.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_6_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...15.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_7_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lop3sdi5dq5.com:443/stream2/...16.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_8_landscap_thumb.jpg?h=398&w=708&q=high" }
+      ]
+    };
+
+    function isStreamLink(url) {
+      return url.endsWith('.m3u8') || url.endsWith('.txt');
+    }
+
+    function loadSeason(season) {
+      const grid = document.getElementById('episode-grid');
+      grid.innerHTML = '';
+      episodes[season].forEach((ep, i) => {
+        const card = document.createElement('div');
+        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg';
+        card.innerHTML = `
+          <img src="${ep.poster}" class="rounded mb-2 w-full" alt="Episode ${i + 1}">
+          <h2 class="text-xl font-semibold mb-2">Episode ${i + 1}</h2>
+          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full">Play</button>
+        `;
+        card.querySelector('button').onclick = () => {
+          if (isStreamLink(ep.url)) {
+            window.location.href = `player.html?video=${encodeURIComponent(ep.url)}`;
+          } else {
+            const video = document.getElementById('modal-video');
+            video.src = ep.url;
+            video.poster = ep.poster;
+            document.getElementById('modal').classList.remove('hidden');
+          }
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    function closeModal() {
+      const video = document.getElementById('modal-video');
+      video.pause();
+      video.src = '';
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    loadSeason(1);
+  </script>
+</body>
+</html>
