@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rocket Boys | Watch All Episodes</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -32,18 +33,28 @@
   </style>
 </head>
 <body>
-  <header class="w-full h-64 bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.ottplay.com/articles/2022q1/Will_there_be_Rocket_OTTplay_news_cover_image_1_971.jpeg');">
-    <h1 class="text-4xl font-bold bg-black bg-opacity-50 px-6 py-2 rounded">🚀 Rocket Boys</h1>
+
+  <!-- Showcase Video Header -->
+  <header class="relative w-full h-64 overflow-hidden">
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover brightness-75">
+      <source src="https://imdb-video.media-imdb.com/vi1311818777/1434659607842-pgv4ql-1678168513431.mp4?Expires=1748692208&Signature=i1Wx1TbueU7YTEGRrk4KVDBH8nbi97iECt5OcQCehWtdq3GErjgmkGtXIUVqmvKy4w7wcjKz8CSoHujjyyO-vEI4JVAFNocbJknbMhzuVnhphgJ6vvG8P~Rvxpn0mjpermlanL1bqRAfXgEAeVdY3TbmaXVva3AgvqtDqS2usZDMwqOMiDHcNH9ZN5uK3pn7EXmwx6vcZBTLFnoysALu0T8~Wr1YYUl9t-rStVmjgVEk19emU55vZjqoYeJR-WKmcDFV2z5hwxkrHVHC2x4XuigV7V7n4~cqWdhNCQObNojdyYeHgQhw1zlB-xTczQmY8~NsSgGCX2O0pfweyDb~Pw__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white px-6 py-2 bg-black bg-opacity-50 rounded-lg">🚀 Rocket Boys</h1>
+    </div>
   </header>
 
+  <!-- Main Content -->
   <main class="container mx-auto px-4 py-8">
-    <div class="mb-6">
+    <div class="mb-6 text-center">
       <button onclick="loadSeason(1)" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white mr-2">Season 1</button>
       <button onclick="loadSeason(2)" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white">Season 2</button>
     </div>
     <div id="episode-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
+  <!-- Modal Video Player -->
   <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
     <div class="bg-gray-800 p-4 rounded-lg w-full max-w-4xl relative modal-enter">
       <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl">&times;</button>
@@ -51,6 +62,7 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
     const episodes = {
       1: [
@@ -75,43 +87,45 @@
       ]
     };
 
-    function isStreamLink(url) {
-      return url.endsWith('.m3u8') || url.endsWith('.txt');
-    }
-
     function loadSeason(season) {
       const grid = document.getElementById('episode-grid');
       grid.innerHTML = '';
-      episodes[season].forEach((ep, i) => {
+      episodes[season].forEach((ep, index) => {
         const card = document.createElement('div');
-        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg';
+        card.className = 'episode-card relative cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow';
         card.innerHTML = `
-          <img src="${ep.poster}" class="rounded mb-2 w-full" alt="Episode ${i + 1}">
-          <h2 class="text-xl font-semibold mb-2">Episode ${i + 1}</h2>
-          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full">Play</button>
+          <img src="${ep.poster}" alt="Episode ${index + 1}" class="w-full h-48 object-cover rounded-lg"/>
+          <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 transition-opacity duration-300 play-icon">
+            <i class="fas fa-play text-white text-4xl"></i>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center py-2 text-sm">Episode ${index + 1}</div>
         `;
-        card.querySelector('button').onclick = () => {
-          if (isStreamLink(ep.url)) {
-            window.location.href = `player.html?video=${encodeURIComponent(ep.url)}`;
-          } else {
-            const video = document.getElementById('modal-video');
-            video.src = ep.url;
-            video.poster = ep.poster;
-            document.getElementById('modal').classList.remove('hidden');
-          }
-        };
+        card.onclick = () => openModal(ep.url, ep.poster);
         grid.appendChild(card);
       });
     }
 
-    function closeModal() {
+    function openModal(url, poster) {
+      const modal = document.getElementById('modal');
       const video = document.getElementById('modal-video');
-      video.pause();
-      video.src = '';
-      document.getElementById('modal').classList.add('hidden');
+      video.src = url;
+      video.poster = poster;
+      modal.classList.remove('hidden');
+      video.play();
     }
 
-    loadSeason(1);
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      const video = document.getElementById('modal-video');
+      video.pause();
+      video.currentTime = 0;
+      video.src = '';
+      modal.classList.add('hidden');
+    }
+
+    // Auto-load Season 1 on page load
+    window.onload = () => loadSeason(1);
   </script>
+
 </body>
 </html>
