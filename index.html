@@ -7,523 +7,111 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: linear-gradient(to bottom, #0f172a, #1e293b);
       color: white;
-      min-height: 100vh;
     }
-    
-    .hero-gradient {
-      background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+    .episode-card:hover .play-icon {
+      opacity: 1;
+      transform: scale(1.1);
     }
-    
-    .episode-card {
-      transition: all 0.3s ease;
-      transform-origin: center;
-    }
-    
-    .episode-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    }
-    
-    .play-btn {
-      transition: all 0.2s ease;
-    }
-    
-    .play-btn:hover {
-      transform: scale(1.05);
-    }
-    
-    .season-btn {
-      transition: all 0.2s ease;
-    }
-    
-    .season-btn.active {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-    
     .modal-enter {
-      animation: modalEnter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: modalEnter 0.3s ease-out forwards;
     }
-    
     @keyframes modalEnter {
       from {
         opacity: 0;
-        transform: scale(0.9) translateY(20px);
+        transform: scale(0.95);
       }
       to {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: scale(1);
       }
-    }
-    
-    .modal-exit {
-      animation: modalExit 0.2s ease-out forwards;
-    }
-    
-    @keyframes modalExit {
-      from {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-      to {
-        opacity: 0;
-        transform: scale(0.95) translateY(20px);
-      }
-    }
-    
-    .episode-number {
-      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .progress-bar {
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      transition: width 0.3s ease;
-    }
-    
-    .loading-spinner {
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
-<body class="relative">
-  <!-- Header with Hero Section -->
-  <header class="relative w-full h-96 overflow-hidden">
-    <div class="absolute inset-0 bg-black opacity-40"></div>
-    <img src="https://images.ottplay.com/articles/2022q1/Will_there_be_Rocket_OTTplay_news_cover_image_1_971.jpeg" 
-         class="w-full h-full object-cover object-center" 
-         alt="Rocket Boys Series Cover">
-    
-    <div class="absolute inset-0 flex items-center justify-center hero-gradient">
-      <div class="text-center px-4 max-w-4xl">
-        <h1 class="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg">
-          <span class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Rocket Boys</span>
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-          The inspiring journey of India's greatest scientists who built the nation's space program
-        </p>
-        <div class="flex justify-center space-x-4">
-          <button class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full text-white font-medium flex items-center">
-            <i class="fas fa-play mr-2"></i> Watch Trailer
-          </button>
-          <button class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-full text-white font-medium flex items-center">
-            <i class="fas fa-info-circle mr-2"></i> More Info
-          </button>
-        </div>
-      </div>
-    </div>
+<body>
+  <header class="w-full h-64 bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.ottplay.com/articles/2022q1/Will_there_be_Rocket_OTTplay_news_cover_image_1_971.jpeg');">
+    <h1 class="text-4xl font-bold bg-black bg-opacity-50 px-6 py-2 rounded">🚀 Rocket Boys</h1>
   </header>
 
-  <!-- Main Content -->
-  <main class="container mx-auto px-4 py-8 relative z-10">
-    <!-- Season Selector -->
-    <div class="flex justify-center mb-10">
-      <div class="inline-flex rounded-full p-1 bg-gray-800 shadow-lg">
-        <button onclick="loadSeason(1)" 
-                class="season-btn px-6 py-2 rounded-full text-white font-medium flex items-center transition-all duration-200">
-          <i class="fas fa-rocket mr-2"></i> Season 1
-        </button>
-        <button onclick="loadSeason(2)" 
-                class="season-btn px-6 py-2 rounded-full text-white font-medium flex items-center transition-all duration-200">
-          <i class="fas fa-meteor mr-2"></i> Season 2
-        </button>
-      </div>
+  <main class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+      <button onclick="loadSeason(1)" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white mr-2">Season 1</button>
+      <button onclick="loadSeason(2)" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white">Season 2</button>
     </div>
-    
-    <!-- Episode Grid -->
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold mb-6 flex items-center">
-        <span id="current-season" class="mr-2">Season 1</span>
-        <span class="text-gray-400 text-sm">({episodeCount} Episodes)</span>
-      </h2>
-      <div id="loading" class="flex justify-center items-center py-12">
-        <div class="loading-spinner border-4 border-blue-500 border-t-transparent rounded-full w-12 h-12"></div>
-      </div>
-      <div id="episode-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-    </div>
-    
-    <!-- Series Info -->
-    <div class="bg-gray-800 rounded-xl p-6 mb-8">
-      <h2 class="text-2xl font-bold mb-4">About the Series</h2>
-      <p class="text-gray-300 mb-4">
-        Rocket Boys is a historical drama series that chronicles the lives of Dr. Vikram Sarabhai and Dr. Homi J. Bhabha, 
-        the pioneers of India's space and nuclear programs. The series showcases their struggles, triumphs, 
-        and the indomitable spirit that led to the creation of ISRO and India's first steps into space exploration.
-      </p>
-      <div class="flex flex-wrap gap-2 mt-4">
-        <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Historical</span>
-        <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Drama</span>
-        <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Biographical</span>
-        <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Inspirational</span>
-      </div>
-    </div>
+    <div id="episode-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
-  <!-- Video Modal -->
-  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
-    <div class="bg-gray-900 rounded-xl w-full max-w-5xl overflow-hidden modal-enter relative">
-      <button onclick="closeModal()" 
-              class="absolute top-4 right-4 z-50 bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center text-white text-xl transition-all">
-        <i class="fas fa-times"></i>
-      </button>
-      
-      <div class="relative pt-[56.25%]">
-        <video id="modal-video" class="absolute top-0 left-0 w-full h-full" controls></video>
-        <div id="video-loading" class="absolute inset-0 flex items-center justify-center bg-black">
-          <div class="loading-spinner border-4 border-blue-500 border-t-transparent rounded-full w-12 h-12"></div>
-        </div>
-      </div>
-      
-      <div class="p-4">
-        <h3 id="modal-title" class="text-xl font-bold mb-2">Episode Title</h3>
-        <div class="flex items-center text-gray-400 text-sm mb-4">
-          <span class="mr-4"><i class="fas fa-clock mr-1"></i> 45 min</span>
-          <span><i class="fas fa-star mr-1 text-yellow-400"></i> 8.5/10</span>
-        </div>
-        <p id="modal-description" class="text-gray-300">
-          Episode description goes here. This would be a brief summary of what happens in this episode.
-        </p>
-      </div>
+  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <div class="bg-gray-800 p-4 rounded-lg w-full max-w-4xl relative modal-enter">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl">&times;</button>
+      <video id="modal-video" class="w-full rounded" controls poster="https://i.imgur.com/I9b8D7p.jpg"></video>
     </div>
   </div>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 py-8">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <h3 class="text-xl font-bold text-white mb-2">Rocket Boys</h3>
-          <p class="text-sm">© 2023 All Rights Reserved</p>
-        </div>
-        <div class="flex space-x-4">
-          <a href="#" class="hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="hover:text-white transition"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="hover:text-white transition"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-    </div>
-  </footer>
 
   <script>
     const episodes = {
       1: [
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/7098f8af2a01e8fec297c3765df45e29.mp4?Expires=1749810699&Signature=EvaNigBX~V1nxBW03sRT6C55nbNY45XfZ5NEE-Jp8-H5ieA8-BnOhBQxgoKIoypDBCM49on1fvvcfLOuY1zWpksFplzewtZrKcHd9JKkHYXRUSCd~GehFvz4jvXlCVx-D6wTEZK~xZNCAa3O4S~ZnACmcRfEyXTnhmAO~SaH81y~N0BxACb5oCsWCVqC1Z30RVw4EqEMxSdn41~PNNrb9Svo-Tk~fhqzFwArlClCNcV98VtEui~mV4u95bN0IsL4EC12iYmTRI0WaCM2j~AsDCL392aYEXZ9XFAA-TSWeVRIOqTxxW4dfEnK3fU~ImOr26nb9MLJDqXGNDHnEJC7Zg__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocketboysmain_landscape_image.jpg?h=398&w=708&q=high",
-          title: "The Dream Begins",
-          description: "Vikram Sarabhai returns to India after his studies abroad, determined to establish a space research program in the newly independent nation.",
-          duration: "48 min",
-          rating: "8.7"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/7edd07d275141b73e94cf71927eaafbf.mp4?Expires=1749811061&Signature=kfF1x4EFHh6wXsgu1SOxBM~O60nRFaGykVjdCrwa1L6vGCfcahHwar2o7D7m1V0QicsEyx1xozW7fLqhNw6lm0P5GaBezmViBDZvrKVkzhk4u3Rr5T6J0wQzhCL9zQFAZwX7S09SRfaM3LutuWLBtSmVWKhxAd0sE7HOEj~p~gT0WtK4USHU3bXE8KZNai7WkS1C6NyOUG8Wqj7rKvEBe465bx3If51QER1zqsk-0BmXUc-fY0faaQSht423F~h3P7RnyyGAgIGAMfbl~~J2gzQJPtM9Sp~L7sem05L0bImqxa2SpRkK7vedFWS8dLK4TkOkm05BFfpx5Bx7aUApDg__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep02_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "Meeting of Minds",
-          description: "Sarabhai meets Homi Bhabha, the father of India's nuclear program, and they discover their shared vision for scientific progress in India.",
-          duration: "45 min",
-          rating: "8.5"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/1978c557405f399047822215189bac1e.mp4?Expires=1749811101&Signature=ZYVYbaTfoGI3HWXLUIxMwbKQD6AJJBvy3e7GiU5HraFiAsjInvGXIrjMy2kul~kbJo-6S31nT4V07HLiL9V2jgHbF4J3mzVmTm-AbivE1k21tP0giLRhBiWYgv6eMwte98luIoNBFUPoEOyBpSMW8JXvUQdON9aIv3PdNLsbEbOFyrU6E3y8oJ7HatX2VkKQuWhvatt2uC5jwttOrMsx1Yg568lgqimO5u7c1NxSmCk04MYIZA8WEheKmLiV6fY3lS-oq4XMpA96cMnK~8OWGtHx1VYS4HyMeM3A8TUOG3cD8kFdB8cz88suBdUZMD4LeP2v2TiROW20ir2LgKIl7g__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep03_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "First Steps",
-          description: "The team faces skepticism from the government as they attempt to launch their first rocket from a small fishing village in Kerala.",
-          duration: "50 min",
-          rating: "8.9"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/7218dbb1bbdbb6a6fc6a17de8d2a219a.mp4?Expires=1749811130&Signature=NLID4JX5dZY-C410CorgFajK5~f9Lqf5lLMPj97dL9020w0ZKEqvVLJpD501Ejv0AWA1HfgypkZPFbROkDqMeDjrd0uw5TZw77a8kxuFTuGcZsoryxDSvlwaNZyP8vDeCkn2rxUza6xzzY~egXupg~3l-~Vx6N7mNoYbUUj-WjLb3Gd8bIT9RjoXHZzn0qgqEz2oNU6a~geZqv00j4C39v7jK8J3VaY7bbFSUmXn1mgoJg8aDR5Xq3R2SicKcViPlR2wSoHJyAEJ70UIVtVN~h7hcxJpj1iZqlWWJBfsB4K~tMAvBzIUtWtZu8YLYkfbWVVg-ns-4fgqBnrIy46jYA__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep04_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "Against All Odds",
-          description: "With limited resources and international sanctions, the team must find innovative solutions to continue their research.",
-          duration: "47 min",
-          rating: "9.0"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/e538ad70afa266e9e9864d8728400d86.mp4?Expires=1749811167&Signature=PBSWY9zvF4b8YulUXBfcTCnHHrfyvfhk0z3pDxANsNUaeh92MDqyrG2bLAlByPrKV1V6B85MpLm8EGtXpXfk3RZVUhwv-NKJ4KCRkHTeEkHHiDJqYemyqFSRsYAR8JfTrLWCsqQuCHa2OSL4yI3cOKauy0e8hsYi2rb2lu2lwmK8kqrHI5Hvkc2b4kF3orOwK9VHXmNiv-Xor2131WTZShtFARNpOOu9WfUvLGrFDMTk-5mr3vVgD1nh4YBLYBa27kTOwPEgL5JW4yfihc11eAM93PAphp9VP-dr2P9EaYv92TeFvoaUvBVn3IWOwmbcU30nxYPemKOlC8QOtIlFWQ__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep05_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "The Silent Revolution",
-          description: "The team makes a breakthrough in rocket technology while dealing with personal sacrifices and political pressures.",
-          duration: "49 min",
-          rating: "9.1"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/53aa01c8c778db337347da9639a402bb.mp4?Expires=1749811203&Signature=WRCJ5FjDxXEROhwyNH8Dll86wtPfsv0F0g05ghz6ApImqXtJTpWbBoBAEMgI956y3ryaGZwjZb3Umbabh5UAQdlVao9PssvJR8-GsI34krAGmODJ6iOnguYcmYmvdXU5OlPR4W3eKARLGwGpeZ7QSN7gGlZsL1b4DegH07JY7TdpJCwCUNLs1n8HAuuj0X4wr5NO~WOlSs-kATgLH3P~3yeHTSyeELeq5ZWrfw2PVoBHefbYaKqwaRw1bhsRuJCUfF6E1ia3h0Wg9LjuaS7ZsbS3kKcUHAGOHgvwSh8Vb2I7chxY63AvxGUbSt4xCh5~R~BE4ogxylI0aBBFzSjORA__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep06_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "Rising Tensions",
-          description: "As the space program grows, conflicts arise between the scientific community and the military establishment.",
-          duration: "46 min",
-          rating: "8.8"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/48907ee351cec215d3d15a7756344a36.mp4?Expires=1749811234&Signature=quz~YL8dUlD0nvGd4URRkLRKGXwpmmmaZM5pRiF8nnoluG8sdt9~ehaCeZoWXOCdIcxD6fFfYI4CUwLzPK9tlj2XDhUS-gKkPYJtmS5ktAB5f3SDL4b5OywIJT3DmnYZupbuNAfvUD8ipP2vvgjoHJx38oENtUET~wZ1cjwXFCuqkfqWys8SW6za7GGwb29Jwq10kOBPVe~i0n7gft-ydudVXu3dfPAyPmGxgSWCt83ixakKjhUbZKnIZDjHTX68Qaq5i8c0jxulSp2TrRrrPFzLQcpFbACOpI~8i6pdtBpWHuj-IMGXAabxqTI9NE4jPKSs6KFDKUKGmSn5Ws4i-A__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep07_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "The Final Countdown",
-          description: "The team prepares for their most ambitious launch yet, knowing failure could mean the end of the space program.",
-          duration: "51 min",
-          rating: "9.2"
-        },
-        { 
-          url: "https://macdn.hakunaymatata.com/resource/9b5aa60926c6018f19c95c407131f0ec.mp4?Expires=1749811266&Signature=aj4MNzOs57Lyei3d3v0WiAZcIsyMGGtUhJM56kzFE62-ws5YrUPiZFh2xODtW~DB14K1svo~yRQf~G1uWKLDGatcs-np3RrdXCt46opY3Jpaw8W0KpQOquJuVh0kXsenPGdRYir3mG5qWnBoNYPzRr3-g2gfbqV~HMwDS7gH~NDz~D0AOKbip5Z~Us6A4zwowKDRwnKFKHvesNjRQICVfyXDU3RWWQbdVpJPO4TWaJYcr6~vHDEqTmfZime7vguCMraLkL6PPnaJfDYEYuzwaLx9fZyHc~Ifn3YkkASsjiVdhfAh-tcrjUQAL7DeroaHr8c7oFaxeOSiIM8IJa0gHQ__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-          poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep08_Landscape_Thumb.jpg?h=398&w=708&q=high",
-          title: "To Infinity and Beyond",
-          description: "The culmination of years of work as India's first satellite is launched into orbit, marking a new era for the nation.",
-          duration: "54 min",
-          rating: "9.5"
-        }
+        { url: "https://macdn.hakunaymatata.com/resource/7098f8af2a01e8fec297c3765df45e29.mp4?Expires=1749810699&Signature=EvaNigBX~V1nxBW03sRT6C55nbNY45XfZ5NEE-Jp8-H5ieA8-BnOhBQxgoKIoypDBCM49on1fvvcfLOuY1zWpksFplzewtZrKcHd9JKkHYXRUSCd~GehFvz4jvXlCVx-D6wTEZK~xZNCAa3O4S~ZnACmcRfEyXTnhmAO~SaH81y~N0BxACb5oCsWCVqC1Z30RVw4EqEMxSdn41~PNNrb9Svo-Tk~fhqzFwArlClCNcV98VtEui~mV4u95bN0IsL4EC12iYmTRI0WaCM2j~AsDCL392aYEXZ9XFAA-TSWeVRIOqTxxW4dfEnK3fU~ImOr26nb9MLJDqXGNDHnEJC7Zg__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/videoasset_images/rocketboysmain_landscape_image.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/7edd07d275141b73e94cf71927eaafbf.mp4?Expires=1749811061&Signature=kfF1x4EFHh6wXsgu1SOxBM~O60nRFaGykVjdCrwa1L6vGCfcahHwar2o7D7m1V0QicsEyx1xozW7fLqhNw6lm0P5GaBezmViBDZvrKVkzhk4u3Rr5T6J0wQzhCL9zQFAZwX7S09SRfaM3LutuWLBtSmVWKhxAd0sE7HOEj~p~gT0WtK4USHU3bXE8KZNai7WkS1C6NyOUG8Wqj7rKvEBe465bx3If51QER1zqsk-0BmXUc-fY0faaQSht423F~h3P7RnyyGAgIGAMfbl~~J2gzQJPtM9Sp~L7sem05L0bImqxa2SpRkK7vedFWS8dLK4TkOkm05BFfpx5Bx7aUApDg__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep02_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/1978c557405f399047822215189bac1e.mp4?Expires=1749811101&Signature=ZYVYbaTfoGI3HWXLUIxMwbKQD6AJJBvy3e7GiU5HraFiAsjInvGXIrjMy2kul~kbJo-6S31nT4V07HLiL9V2jgHbF4J3mzVmTm-AbivE1k21tP0giLRhBiWYgv6eMwte98luIoNBFUPoEOyBpSMW8JXvUQdON9aIv3PdNLsbEbOFyrU6E3y8oJ7HatX2VkKQuWhvatt2uC5jwttOrMsx1Yg568lgqimO5u7c1NxSmCk04MYIZA8WEheKmLiV6fY3lS-oq4XMpA96cMnK~8OWGtHx1VYS4HyMeM3A8TUOG3cD8kFdB8cz88suBdUZMD4LeP2v2TiROW20ir2LgKIl7g__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep03_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/7218dbb1bbdbb6a6fc6a17de8d2a219a.mp4?Expires=1749811130&Signature=NLID4JX5dZY-C410CorgFajK5~f9Lqf5lLMPj97dL9020w0ZKEqvVLJpD501Ejv0AWA1HfgypkZPFbROkDqMeDjrd0uw5TZw77a8kxuFTuGcZsoryxDSvlwaNZyP8vDeCkn2rxUza6xzzY~egXupg~3l-~Vx6N7mNoYbUUj-WjLb3Gd8bIT9RjoXHZzn0qgqEz2oNU6a~geZqv00j4C39v7jK8J3VaY7bbFSUmXn1mgoJg8aDR5Xq3R2SicKcViPlR2wSoHJyAEJ70UIVtVN~h7hcxJpj1iZqlWWJBfsB4K~tMAvBzIUtWtZu8YLYkfbWVVg-ns-4fgqBnrIy46jYA__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep04_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/e538ad70afa266e9e9864d8728400d86.mp4?Expires=1749811167&Signature=PBSWY9zvF4b8YulUXBfcTCnHHrfyvfhk0z3pDxANsNUaeh92MDqyrG2bLAlByPrKV1V6B85MpLm8EGtXpXfk3RZVUhwv-NKJ4KCRkHTeEkHHiDJqYemyqFSRsYAR8JfTrLWCsqQuCHa2OSL4yI3cOKauy0e8hsYi2rb2lu2lwmK8kqrHI5Hvkc2b4kF3orOwK9VHXmNiv-Xor2131WTZShtFARNpOOu9WfUvLGrFDMTk-5mr3vVgD1nh4YBLYBa27kTOwPEgL5JW4yfihc11eAM93PAphp9VP-dr2P9EaYv92TeFvoaUvBVn3IWOwmbcU30nxYPemKOlC8QOtIlFWQ__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep05_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/53aa01c8c778db337347da9639a402bb.mp4?Expires=1749811203&Signature=WRCJ5FjDxXEROhwyNH8Dll86wtPfsv0F0g05ghz6ApImqXtJTpWbBoBAEMgI956y3ryaGZwjZb3Umbabh5UAQdlVao9PssvJR8-GsI34krAGmODJ6iOnguYcmYmvdXU5OlPR4W3eKARLGwGpeZ7QSN7gGlZsL1b4DegH07JY7TdpJCwCUNLs1n8HAuuj0X4wr5NO~WOlSs-kATgLH3P~3yeHTSyeELeq5ZWrfw2PVoBHefbYaKqwaRw1bhsRuJCUfF6E1ia3h0Wg9LjuaS7ZsbS3kKcUHAGOHgvwSh8Vb2I7chxY63AvxGUbSt4xCh5~R~BE4ogxylI0aBBFzSjORA__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep06_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/48907ee351cec215d3d15a7756344a36.mp4?Expires=1749811234&Signature=quz~YL8dUlD0nvGd4URRkLRKGXwpmmmaZM5pRiF8nnoluG8sdt9~ehaCeZoWXOCdIcxD6fFfYI4CUwLzPK9tlj2XDhUS-gKkPYJtmS5ktAB5f3SDL4b5OywIJT3DmnYZupbuNAfvUD8ipP2vvgjoHJx38oENtUET~wZ1cjwXFCuqkfqWys8SW6za7GGwb29Jwq10kOBPVe~i0n7gft-ydudVXu3dfPAyPmGxgSWCt83ixakKjhUbZKnIZDjHTX68Qaq5i8c0jxulSp2TrRrrPFzLQcpFbACOpI~8i6pdtBpWHuj-IMGXAabxqTI9NE4jPKSs6KFDKUKGmSn5Ws4i-A__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep07_Landscape_Thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://macdn.hakunaymatata.com/resource/9b5aa60926c6018f19c95c407131f0ec.mp4?Expires=1749811266&Signature=aj4MNzOs57Lyei3d3v0WiAZcIsyMGGtUhJM56kzFE62-ws5YrUPiZFh2xODtW~DB14K1svo~yRQf~G1uWKLDGatcs-np3RrdXCt46opY3Jpaw8W0KpQOquJuVh0kXsenPGdRYir3mG5qWnBoNYPzRr3-g2gfbqV~HMwDS7gH~NDz~D0AOKbip5Z~Us6A4zwowKDRwnKFKHvesNjRQICVfyXDU3RWWQbdVpJPO4TWaJYcr6~vHDEqTmfZime7vguCMraLkL6PPnaJfDYEYuzwaLx9fZyHc~Ifn3YkkASsjiVdhfAh-tcrjUQAL7DeroaHr8c7oFaxeOSiIM8IJa0gHQ__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep08_Landscape_Thumb.jpg?h=398&w=708&q=high" }
       ],
       2: [
-        { 
-          url: "https://scvo.seawrightqrg.sbs:443/v4/ic/mutjd/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/blitz_assets/1000213610/thumbnail/1734512121828_rocket_boys_preview_17dec_landscape_thumb_1920x1080.jpg?h=398&w=708&q=high",
-          title: "New Horizons",
-          description: "With the success of the first satellite launch, the team faces new challenges as they plan more ambitious missions.",
-          duration: "48 min",
-          rating: "8.6"
-        },
-        { 
-          url: "https://sskt.thurberdvob.sbs:443/v4/db/ktxzz/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_2_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "The Next Generation",
-          description: "Young scientists join the program, bringing fresh ideas but also creating generational conflicts with the veterans.",
-          duration: "47 min",
-          rating: "8.4"
-        },
-        { 
-          url: "https://sxic.mazedukhkortfj.sbs:443/v4/db/iracv/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_3_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "International Relations",
-          description: "The team navigates complex geopolitics as they seek international collaborations while maintaining national security.",
-          duration: "49 min",
-          rating: "8.7"
-        },
-        { 
-          url: "https://sojg.feistjmyrodne.sbs:443/v4/36/ovgfi/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_4_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "Breaking Barriers",
-          description: "The team pushes technological boundaries with an experimental launch vehicle design that could revolutionize space travel.",
-          duration: "50 min",
-          rating: "8.9"
-        },
-        { 
-          url: "https://s9dz.yevettesh.sbs:443/v4/db/j1hmk/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_5_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "Darkest Before Dawn",
-          description: "A catastrophic failure during testing threatens to derail the entire program and tests the team's resilience.",
-          duration: "51 min",
-          rating: "9.0"
-        },
-        { 
-          url: "https://cdn4521.lada357janet.com:443/stream2/i-arch-400/464b62ba6b90e85df275c28f050d72f1/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21kekhWT6ZVaPRFaqllaRdnWXV1MO1WR0kFVVdnWqFleNREbp1kaohmTy0UP:1748606770:213.232.235.66:611e1dda15c8328d7d7c5bfa4b26c23f57072780aeacbea8157f8c5abf239f6d/./1080/index.m3u8", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_6_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "Phoenix Rising",
-          description: "The team rebuilds from the ashes of failure, learning valuable lessons that will shape the future of the program.",
-          duration: "48 min",
-          rating: "9.1"
-        },
-        { 
-          url: "https://skra.selmagwayl.sbs:443/v4/db/qfsgn/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_7_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "Legacy",
-          description: "As the original leaders prepare to pass the torch, they reflect on their journey and the future of India's space ambitions.",
-          duration: "52 min",
-          rating: "9.3"
-        },
-        { 
-          url: "https://sxic.swobodafocht.sbs:443/v4/9a/5gupa/index-f1-v1-a1.txt", 
-          poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_8_landscap_thumb.jpg?h=398&w=708&q=high",
-          title: "The Final Frontier",
-          description: "The season culminates with a landmark achievement that cements India's place among the world's spacefaring nations.",
-          duration: "55 min",
-          rating: "9.5"
-        }
+        { url: "https://scvo.seawrightqrg.sbs:443/v4/ic/mutjd/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/blitz_assets/1000213610/thumbnail/1734512121828_rocket_boys_preview_17dec_landscape_thumb_1920x1080.jpg?h=398&w=708&q=high" },
+        { url: "https://sskt.thurberdvob.sbs:443/v4/db/ktxzz/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_2_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://sxic.mazedukhkortfj.sbs:443/v4/db/iracv/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_3_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://sojg.feistjmyrodne.sbs:443/v4/36/ovgfi/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_4_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://s9dz.yevettesh.sbs:443/v4/db/j1hmk/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_5_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://cdn4521.lada357janet.com:443/stream2/i-arch-400/464b62ba6b90e85df275c28f050d72f1/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21kekhWT6ZVaPRFaqllaRdnWXV1MO1WR0kFVVdnWqFleNREbp1kaohmTy0UP:1748606770:213.232.235.66:611e1dda15c8328d7d7c5bfa4b26c23f57072780aeacbea8157f8c5abf239f6d/./1080/index.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_6_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://skra.selmagwayl.sbs:443/v4/db/qfsgn/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_7_landscap_thumb.jpg?h=398&w=708&q=high" },
+        { url: "https://sxic.swobodafocht.sbs:443/v4/9a/5gupa/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_8_landscap_thumb.jpg?h=398&w=708&q=high" }
       ]
     };
-
-    // Current season and watched episodes
-    let currentSeason = 1;
-    const watchedEpisodes = JSON.parse(localStorage.getItem('watchedEpisodes')) || {1: [], 2: []};
 
     function isStreamLink(url) {
       return url.endsWith('.m3u8') || url.endsWith('.txt');
     }
 
     function loadSeason(season) {
-      currentSeason = season;
       const grid = document.getElementById('episode-grid');
-      const loading = document.getElementById('loading');
-      const seasonTitle = document.getElementById('current-season');
-      
-      // Show loading state
       grid.innerHTML = '';
-      loading.classList.remove('hidden');
-      seasonTitle.textContent = `Season ${season}`;
-      seasonTitle.nextElementSibling.textContent = `(${episodes[season].length} Episodes)`;
-      
-      // Update active season button
-      document.querySelectorAll('.season-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-blue-600', 'bg-purple-600');
-        if (btn.textContent.includes(`Season ${season}`)) {
-          btn.classList.add('active', season === 1 ? 'bg-blue-600' : 'bg-purple-600');
-        }
+      episodes[season].forEach((ep, i) => {
+        const card = document.createElement('div');
+        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg';
+        card.innerHTML = `
+          <img src="${ep.poster}" class="rounded mb-2 w-full" alt="Episode ${i + 1}">
+          <h2 class="text-xl font-semibold mb-2">Episode ${i + 1}</h2>
+          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full">Play</button>
+        `;
+        card.querySelector('button').onclick = () => {
+          if (isStreamLink(ep.url)) {
+            window.location.href = `player.html?video=${encodeURIComponent(ep.url)}`;
+          } else {
+            const video = document.getElementById('modal-video');
+            video.src = ep.url;
+            video.poster = ep.poster;
+            document.getElementById('modal').classList.remove('hidden');
+          }
+        };
+        grid.appendChild(card);
       });
-      
-      // Simulate loading delay for better UX
-      setTimeout(() => {
-        loading.classList.add('hidden');
-        
-        episodes[season].forEach((ep, i) => {
-          const epNum = i + 1;
-          const isWatched = watchedEpisodes[season].includes(epNum);
-          
-          const card = document.createElement('div');
-          card.className = 'episode-card bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl';
-          card.innerHTML = `
-            <div class="relative">
-              <img src="${ep.poster}" class="w-full h-48 object-cover" alt="Episode ${epNum}">
-              ${isWatched ? `
-                <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                  <i class="fas fa-check mr-1"></i> Watched
-                </div>
-              ` : ''}
-              <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-                <button class="play-btn bg-blue-600 hover:bg-blue-700 w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl shadow-lg">
-                  <i class="fas fa-play"></i>
-                </button>
-              </div>
-            </div>
-            <div class="p-4">
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="text-lg font-bold">
-                  <span class="episode-number">${epNum}.</span> ${ep.title}
-                </h3>
-                <span class="text-gray-400 text-sm">${ep.duration}</span>
-              </div>
-              <div class="flex items-center text-sm text-gray-300 mb-3">
-                <i class="fas fa-star text-yellow-400 mr-1"></i> ${ep.rating}
-              </div>
-              <p class="text-gray-400 text-sm line-clamp-2 mb-3">${ep.description}</p>
-              <div class="progress-bar rounded-full w-full mb-2">
-                <div class="progress-fill rounded-full" style="width: ${isWatched ? '100' : '0'}%"></div>
-              </div>
-              <button class="play-btn w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center">
-                <i class="fas fa-play mr-2"></i> ${isWatched ? 'Watch Again' : 'Watch Now'}
-              </button>
-            </div>
-          `;
-          
-          // Add click handler for both play buttons
-          const playBtns = card.querySelectorAll('.play-btn');
-          playBtns.forEach(btn => {
-            btn.onclick = (e) => {
-              e.stopPropagation();
-              playEpisode(ep, epNum);
-            };
-          });
-          
-          grid.appendChild(card);
-        });
-      }, 500);
-    }
-
-    function playEpisode(episode, epNum) {
-      // Mark as watched if not already
-      if (!watchedEpisodes[currentSeason].includes(epNum)) {
-        watchedEpisodes[currentSeason].push(epNum);
-        localStorage.setItem('watchedEpisodes', JSON.stringify(watchedEpisodes));
-      }
-      
-      if (isStreamLink(episode.url)) {
-        // For streaming links, we'd normally redirect to a player page
-        // For this demo, we'll show a message
-        alert(`This would redirect to the streaming player for:\n\n${episode.title}`);
-      } else {
-        // Show modal for direct video playback
-        const modal = document.getElementById('modal');
-        const video = document.getElementById('modal-video');
-        const loading = document.getElementById('video-loading');
-        
-        // Set modal content
-        document.getElementById('modal-title').textContent = `Episode ${epNum}: ${episode.title}`;
-        document.getElementById('modal-description').textContent = episode.description;
-        
-        // Show loading state
-        loading.classList.remove('hidden');
-        video.classList.add('hidden');
-        
-        // Show modal
-        modal.classList.remove('hidden');
-        
-        // Set video source
-        video.src = episode.url;
-        video.poster = episode.poster;
-        
-        // When video can play, hide loading
-        video.oncanplay = () => {
-          loading.classList.add('hidden');
-          video.classList.remove('hidden');
-          video.play().catch(e => console.log("Autoplay prevented:", e));
-        };
-        
-        // Handle errors
-        video.onerror = () => {
-          loading.classList.add('hidden');
-          alert("Error loading video. Please try again later.");
-          closeModal();
-        };
-      }
     }
 
     function closeModal() {
-      const modal = document.getElementById('modal');
       const video = document.getElementById('modal-video');
-      
-      // Add exit animation
-      modal.querySelector('div').classList.add('modal-exit');
-      
-      setTimeout(() => {
-        video.pause();
-        video.src = '';
-        modal.classList.add('hidden');
-        modal.querySelector('div').classList.remove('modal-exit');
-      }, 200);
+      video.pause();
+      video.src = '';
+      document.getElementById('modal').classList.add('hidden');
     }
 
-    // Initialize with Season 1
     loadSeason(1);
-    
-    // Close modal when clicking outside
-    document.getElementById('modal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeModal();
-      }
-    });
-    
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !document.getElementById('modal').classList.contains('hidden')) {
-        closeModal();
-      }
-    });
   </script>
 </body>
 </html>
