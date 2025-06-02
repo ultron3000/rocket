@@ -29,11 +29,60 @@
         transform: scale(1);
       }
     }
+    .video-header {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 40%; /* 16:9 aspect ratio */
+      overflow: hidden;
+    }
+    .video-header video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+    @media (max-width: 768px) {
+      .video-header {
+        padding-bottom: 60%; /* Taller aspect ratio for mobile */
+      }
+    }
   </style>
 </head>
 <body>
-  <header class="w-full h-64 bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.ottplay.com/articles/2022q1/Will_there_be_Rocket_OTTplay_news_cover_image_1_971.jpeg');">
-    
+  <header class="video-header">
+    <video autoplay muted loop playsinline>
+      <source src="https://imdb-video.media-imdb.com/vi1311818777/1434659607842-pgv4ql-1678168513431.mp4?Expires=1748967091&Signature=jCQJuq7~emrXj88jE3D7CnzG4sGBxD1Jqsa4J9RWPlNdvRlZbrEfvvCh-c1CODPKPlSCNa95770kuunAf8~JVjapZ1WOLb6bqPSTpqFHfNK1F~QQ1-eH4e9IaIw5Y6XAwST8zDJbQM-UkhKoh51zj3Aa4QCVR5M7layNzHVzKBiATLn8IT7jj-4bW4wFKOC~vr1H-k1YoRmvoEa5EOqtD8V6N0LlCAzdLRGv-X2wvrQhmGWAj1krYgBk3XnsYGaZcRqDKvGlnn2125aVXSRYVMLNH7ekyyTlSKfSUCr-2WPgGwniyVTrhrWAvFCqrDzPNJNf-elWG2BcjZj3a1q2-w__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="video-overlay">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Rocket Boys</h1>
+      <p class="text-xl md:text-2xl max-w-2xl">Watch all episodes of the thrilling series about India's space pioneers</p>
+      <div class="mt-6 flex space-x-4">
+        <button class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg text-white font-semibold flex items-center">
+          <i class="fas fa-play mr-2"></i> Watch Now
+        </button>
+        <button class="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg text-white font-semibold flex items-center">
+          <i class="fas fa-info-circle mr-2"></i> More Info
+        </button>
+      </div>
+    </div>
   </header>
 
   <main class="container mx-auto px-4 py-8">
@@ -84,11 +133,13 @@
       grid.innerHTML = '';
       episodes[season].forEach((ep, i) => {
         const card = document.createElement('div');
-        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg';
+        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg transition duration-300 hover:transform hover:scale-105';
         card.innerHTML = `
-          <img src="${ep.poster}" class="rounded mb-2 w-full" alt="Episode ${i + 1}">
+          <img src="${ep.poster}" class="rounded mb-2 w-full h-48 object-cover" alt="Episode ${i + 1}">
           <h2 class="text-xl font-semibold mb-2">Episode ${i + 1}</h2>
-          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full">Play</button>
+          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full flex items-center justify-center">
+            <i class="fas fa-play mr-2"></i> Play
+          </button>
         `;
         card.querySelector('button').onclick = () => {
           if (isStreamLink(ep.url)) {
@@ -111,7 +162,16 @@
       document.getElementById('modal').classList.add('hidden');
     }
 
-    loadSeason(1);
+    // Auto-play the header video on mobile devices
+    document.addEventListener('DOMContentLoaded', function() {
+      const headerVideo = document.querySelector('.video-header video');
+      if (headerVideo) {
+        headerVideo.play().catch(e => {
+          console.log("Autoplay prevented, showing fallback");
+        });
+      }
+      loadSeason(1);
+    });
   </script>
 </body>
 </html>
