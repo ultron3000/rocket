@@ -1,171 +1,446 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rocket Boys | Watch All Episodes</title>
+  <title>Rocket Boys</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom, #0f172a, #1e293b);
-      color: white;
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-    .episode-card:hover .play-icon {
-      opacity: 1;
-      transform: scale(1.1);
+    ::-webkit-scrollbar-track {
+      background: #111;
     }
-    .modal-enter {
-      animation: modalEnter 0.3s ease-out forwards;
+    ::-webkit-scrollbar-thumb {
+      background: #ffcc00;
+      border-radius: 4px;
     }
-    @keyframes modalEnter {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ffdd33;
     }
-    .video-header {
-      position: relative;
-      width: 100%;
-      height: 0;
-      padding-bottom: 40%; /* 16:9 aspect ratio */
-      overflow: hidden;
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .video-header video {
+    
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    
+    .glow-effect { position: relative; }
+    .glow-effect::after {
+      content: '';
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0);
+      transition: box-shadow 0.3s ease;
+      pointer-events: none;
+    }
+    .glow-effect:hover::after { box-shadow: 0 0 15px rgba(255, 204, 0, 0.7); }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #ffcc00, #ff9900);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    
+    .showcase-video {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      z-index: 0;
     }
-    .video-overlay {
+    
+    .showcase-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+      z-index: 1;
+    }
+    .showcase-content { position: relative; z-index: 2; }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    .video-container iframe,
+    .video-container video {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-    }
-    @media (max-width: 768px) {
-      .video-header {
-        padding-bottom: 60%; /* Taller aspect ratio for mobile */
-      }
     }
   </style>
 </head>
-<body>
-  <header class="video-header">
-    <video autoplay muted loop playsinline>
-      <source src="https://imdb-video.media-imdb.com/vi1311818777/1434659607842-pgv4ql-1678168513431.mp4?Expires=1748967091&Signature=jCQJuq7~emrXj88jE3D7CnzG4sGBxD1Jqsa4J9RWPlNdvRlZbrEfvvCh-c1CODPKPlSCNa95770kuunAf8~JVjapZ1WOLb6bqPSTpqFHfNK1F~QQ1-eH4e9IaIw5Y6XAwST8zDJbQM-UkhKoh51zj3Aa4QCVR5M7layNzHVzKBiATLn8IT7jj-4bW4wFKOC~vr1H-k1YoRmvoEa5EOqtD8V6N0LlCAzdLRGv-X2wvrQhmGWAj1krYgBk3XnsYGaZcRqDKvGlnn2125aVXSRYVMLNH7ekyyTlSKfSUCr-2WPgGwniyVTrhrWAvFCqrDzPNJNf-elWG2BcjZj3a1q2-w__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
-      Your browser does not support HTML5 video.
-    </video>
-    <div class="video-overlay">
-      <h1 class="text-4xl md:text-6xl font-bold mb-4">Rocket Boys</h1>
-      <p class="text-xl md:text-2xl max-w-2xl">Series about India's space pioneers</p>
-      <div class="mt-6 flex space-x-4">
+<body class="bg-black text-gray-100 min-h-screen">
+
+<header class="sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm border-b border-yellow-600/20">
+
+<style>
+@keyframes rocketFly {
+  0% { transform: translateY(0) rotate(-45deg); }
+  50% { transform: translateY(-4px) rotate(-45deg); }
+  100% { transform: translateY(0) rotate(-45deg); }
+}
+@keyframes rocketFlame {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+</style>
+
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+
+      <!-- Logo circle stays same size -->
+      <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center relative">
+
+        <!-- Rocket Icon -->
+        <i class="fas fa-rocket text-black text-lg"
+           style="animation: rocketFly 1.2s ease-in-out infinite;"></i>
+
+        <!-- Flame -->
+        <span class="absolute bottom-0 w-1.5 h-1.5 bg-orange-400 rounded-full blur-sm"
+              style="animation: rocketFlame .4s ease-in-out infinite;"></span>
       </div>
-    </div>
-  </header>
 
-  <main class="container mx-auto px-4 py-8">
-    <div class="mb-6">
-      <button onclick="loadSeason(1)" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white mr-2">Season 1</button>
-      <button onclick="loadSeason(2)" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white">Season 2</button>
+      <h1 class="text-2xl font-bold gradient-text">Rocket Boys</h1>
     </div>
-    <div id="episode-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-  </main>
 
-  <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-    <div class="bg-gray-800 p-4 rounded-lg w-full max-w-4xl relative modal-enter">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-xl">&times;</button>
-      <video id="modal-video" class="w-full rounded" controls poster="https://i.imgur.com/I9b8D7p.jpg"></video>
+    <div class="flex items-center space-x-4">
+      <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-800 transition">
+        <i class="fas fa-moon text-yellow-500"></i>
+      </button>
+      <button id="search-btn" class="p-2 rounded-full hover:bg-gray-800 transition">
+        <i class="fas fa-search text-yellow-500"></i>
+      </button>
     </div>
   </div>
 
-  <script>
-    const episodes = {
-      1: [
-        { url: "https://macdn.hakunaymatata.com/resource/7098f8af2a01e8fec297c3765df45e29.mp4?Expires=1749810699&Signature=EvaNigBX~V1nxBW03sRT6C55nbNY45XfZ5NEE-Jp8-H5ieA8-BnOhBQxgoKIoypDBCM49on1fvvcfLOuY1zWpksFplzewtZrKcHd9JKkHYXRUSCd~GehFvz4jvXlCVx-D6wTEZK~xZNCAa3O4S~ZnACmcRfEyXTnhmAO~SaH81y~N0BxACb5oCsWCVqC1Z30RVw4EqEMxSdn41~PNNrb9Svo-Tk~fhqzFwArlClCNcV98VtEui~mV4u95bN0IsL4EC12iYmTRI0WaCM2j~AsDCL392aYEXZ9XFAA-TSWeVRIOqTxxW4dfEnK3fU~ImOr26nb9MLJDqXGNDHnEJC7Zg__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/videoasset_images/rocketboysmain_landscape_image.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/7edd07d275141b73e94cf71927eaafbf.mp4?Expires=1749811061&Signature=kfF1x4EFHh6wXsgu1SOxBM~O60nRFaGykVjdCrwa1L6vGCfcahHwar2o7D7m1V0QicsEyx1xozW7fLqhNw6lm0P5GaBezmViBDZvrKVkzhk4u3Rr5T6J0wQzhCL9zQFAZwX7S09SRfaM3LutuWLBtSmVWKhxAd0sE7HOEj~p~gT0WtK4USHU3bXE8KZNai7WkS1C6NyOUG8Wqj7rKvEBe465bx3If51QER1zqsk-0BmXUc-fY0faaQSht423F~h3P7RnyyGAgIGAMfbl~~J2gzQJPtM9Sp~L7sem05L0bImqxa2SpRkK7vedFWS8dLK4TkOkm05BFfpx5Bx7aUApDg__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep02_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/1978c557405f399047822215189bac1e.mp4?Expires=1749811101&Signature=ZYVYbaTfoGI3HWXLUIxMwbKQD6AJJBvy3e7GiU5HraFiAsjInvGXIrjMy2kul~kbJo-6S31nT4V07HLiL9V2jgHbF4J3mzVmTm-AbivE1k21tP0giLRhBiWYgv6eMwte98luIoNBFUPoEOyBpSMW8JXvUQdON9aIv3PdNLsbEbOFyrU6E3y8oJ7HatX2VkKQuWhvatt2uC5jwttOrMsx1Yg568lgqimO5u7c1NxSmCk04MYIZA8WEheKmLiV6fY3lS-oq4XMpA96cMnK~8OWGtHx1VYS4HyMeM3A8TUOG3cD8kFdB8cz88suBdUZMD4LeP2v2TiROW20ir2LgKIl7g__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep03_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/7218dbb1bbdbb6a6fc6a17de8d2a219a.mp4?Expires=1749811130&Signature=NLID4JX5dZY-C410CorgFajK5~f9Lqf5lLMPj97dL9020w0ZKEqvVLJpD501Ejv0AWA1HfgypkZPFbROkDqMeDjrd0uw5TZw77a8kxuFTuGcZsoryxDSvlwaNZyP8vDeCkn2rxUza6xzzY~egXupg~3l-~Vx6N7mNoYbUUj-WjLb3Gd8bIT9RjoXHZzn0qgqEz2oNU6a~geZqv00j4C39v7jK8J3VaY7bbFSUmXn1mgoJg8aDR5Xq3R2SicKcViPlR2wSoHJyAEJ70UIVtVN~h7hcxJpj1iZqlWWJBfsB4K~tMAvBzIUtWtZu8YLYkfbWVVg-ns-4fgqBnrIy46jYA__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep04_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/e538ad70afa266e9e9864d8728400d86.mp4?Expires=1749811167&Signature=PBSWY9zvF4b8YulUXBfcTCnHHrfyvfhk0z3pDxANsNUaeh92MDqyrG2bLAlByPrKV1V6B85MpLm8EGtXpXfk3RZVUhwv-NKJ4KCRkHTeEkHHiDJqYemyqFSRsYAR8JfTrLWCsqQuCHa2OSL4yI3cOKauy0e8hsYi2rb2lu2lwmK8kqrHI5Hvkc2b4kF3orOwK9VHXmNiv-Xor2131WTZShtFARNpOOu9WfUvLGrFDMTk-5mr3vVgD1nh4YBLYBa27kTOwPEgL5JW4yfihc11eAM93PAphp9VP-dr2P9EaYv92TeFvoaUvBVn3IWOwmbcU30nxYPemKOlC8QOtIlFWQ__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep05_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/53aa01c8c778db337347da9639a402bb.mp4?Expires=1749811203&Signature=WRCJ5FjDxXEROhwyNH8Dll86wtPfsv0F0g05ghz6ApImqXtJTpWbBoBAEMgI956y3ryaGZwjZb3Umbabh5UAQdlVao9PssvJR8-GsI34krAGmODJ6iOnguYcmYmvdXU5OlPR4W3eKARLGwGpeZ7QSN7gGlZsL1b4DegH07JY7TdpJCwCUNLs1n8HAuuj0X4wr5NO~WOlSs-kATgLH3P~3yeHTSyeELeq5ZWrfw2PVoBHefbYaKqwaRw1bhsRuJCUfF6E1ia3h0Wg9LjuaS7ZsbS3kKcUHAGOHgvwSh8Vb2I7chxY63AvxGUbSt4xCh5~R~BE4ogxylI0aBBFzSjORA__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep06_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/48907ee351cec215d3d15a7756344a36.mp4?Expires=1749811234&Signature=quz~YL8dUlD0nvGd4URRkLRKGXwpmmmaZM5pRiF8nnoluG8sdt9~ehaCeZoWXOCdIcxD6fFfYI4CUwLzPK9tlj2XDhUS-gKkPYJtmS5ktAB5f3SDL4b5OywIJT3DmnYZupbuNAfvUD8ipP2vvgjoHJx38oENtUET~wZ1cjwXFCuqkfqWys8SW6za7GGwb29Jwq10kOBPVe~i0n7gft-ydudVXu3dfPAyPmGxgSWCt83ixakKjhUbZKnIZDjHTX68Qaq5i8c0jxulSp2TrRrrPFzLQcpFbACOpI~8i6pdtBpWHuj-IMGXAabxqTI9NE4jPKSs6KFDKUKGmSn5Ws4i-A__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep07_Landscape_Thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://macdn.hakunaymatata.com/resource/9b5aa60926c6018f19c95c407131f0ec.mp4?Expires=1749811266&Signature=aj4MNzOs57Lyei3d3v0WiAZcIsyMGGtUhJM56kzFE62-ws5YrUPiZFh2xODtW~DB14K1svo~yRQf~G1uWKLDGatcs-np3RrdXCt46opY3Jpaw8W0KpQOquJuVh0kXsenPGdRYir3mG5qWnBoNYPzRr3-g2gfbqV~HMwDS7gH~NDz~D0AOKbip5Z~Us6A4zwowKDRwnKFKHvesNjRQICVfyXDU3RWWQbdVpJPO4TWaJYcr6~vHDEqTmfZime7vguCMraLkL6PPnaJfDYEYuzwaLx9fZyHc~Ifn3YkkASsjiVdhfAh-tcrjUQAL7DeroaHr8c7oFaxeOSiIM8IJa0gHQ__&Key-Pair-Id=KMHN1LQ1HEUPL", poster: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep08_Landscape_Thumb.jpg?h=398&w=708&q=high" }
-      ],
-      2: [
-        { url: "https://scvo.seawrightqrg.sbs:443/v4/ic/mutjd/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/blitz_assets/1000213610/thumbnail/1734512121828_rocket_boys_preview_17dec_landscape_thumb_1920x1080.jpg?h=398&w=708&q=high" },
-        { url: "https://sskt.thurberdvob.sbs:443/v4/db/ktxzz/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_2_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://sxic.mazedukhkortfj.sbs:443/v4/db/iracv/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_3_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://sojg.feistjmyrodne.sbs:443/v4/36/ovgfi/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_4_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://s9dz.yevettesh.sbs:443/v4/db/j1hmk/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_5_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://cdn4521.lada357janet.com:443/stream2/i-arch-400/464b62ba6b90e85df275c28f050d72f1/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21kekhWT6ZVaPRFaqllaRdnWXV1MO1WR0kFVVdnWqFleNREbp1kaohmTy0UP:1748606770:213.232.235.66:611e1dda15c8328d7d7c5bfa4b26c23f57072780aeacbea8157f8c5abf239f6d/./1080/index.m3u8", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_6_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://skra.selmagwayl.sbs:443/v4/db/qfsgn/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_7_landscap_thumb.jpg?h=398&w=708&q=high" },
-        { url: "https://sxic.swobodafocht.sbs:443/v4/9a/5gupa/index-f1-v1-a1.txt", poster: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_8_landscap_thumb.jpg?h=398&w=708&q=high" }
-      ]
-    };
+  <div id="search-bar" class="hidden px-4 pb-4">
+    <div class="relative">
+      <input type="text" placeholder="Search episodes..."
+             class="w-full bg-gray-900 border border-yellow-600/30 rounded-full py-2 px-4 pl-10 text-white">
+      <i class="fas fa-search absolute left-3 top-3 text-yellow-500"></i>
+    </div>
+  </div>
+</header>
 
-    function isStreamLink(url) {
-      return url.endsWith('.m3u8') || url.endsWith('.txt');
-    }
 
-    function loadSeason(season) {
-      const grid = document.getElementById('episode-grid');
-      grid.innerHTML = '';
-      episodes[season].forEach((ep, i) => {
-        const card = document.createElement('div');
-        card.className = 'episode-card bg-gray-700 p-4 rounded shadow hover:shadow-lg transition duration-300 hover:transform hover:scale-105';
-        card.innerHTML = `
-          <img src="${ep.poster}" class="rounded mb-2 w-full h-48 object-cover" alt="Episode ${i + 1}">
-          <h2 class="text-xl font-semibold mb-2">Episode ${i + 1}</h2>
-          <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded w-full flex items-center justify-center">
-            <i class="fas fa-play mr-2"></i> Play
-          </button>
-        `;
-        card.querySelector('button').onclick = () => {
-          if (isStreamLink(ep.url)) {
-            window.location.href = `player.html?video=${encodeURIComponent(ep.url)}`;
-          } else {
-            const video = document.getElementById('modal-video');
-            video.src = ep.url;
-            video.poster = ep.poster;
-            document.getElementById('modal').classList.remove('hidden');
-          }
-        };
-        grid.appendChild(card);
-      });
-    }
+<main class="container mx-auto px-4 py-8">
+  <section class="mb-12 relative overflow-hidden rounded-xl h-64 md:h-96">
+    <video autoplay muted loop class="showcase-video">
+      <source src="https://imdb-video.media-imdb.com/vi1311818777/1434659607842-pgv4ql-1678168513431.mp4?Expires=1762042518&Signature=CrU0QHlRF6I7cy8OlZzbMAuk0ycU4BAR8hgn7zEMv3OhdflZtuiJ25JI1AcUUkicVMd-~lf38fL4To-KtgXt6~eAGAq0h5sjyY3AHexrOJeDpCJ7DpeHSdWwwAauz7V5f9YMAfWQmefmEiOfBHCiyOTAY~LEiVOSpzaW1LgvTxzNpDXDzwU0DScMimBYH28oaOeN491VCcKO85ok5gBh1t4XU6yOByqVySkR1hq-lqrpGZfgMaTUpcDrERtHlif0l8wjgY8O0Ggv0pvdJ32AueR8lErUjde9EvcbL-FA-rPvE6k4xlvsEj8sIXrgK~1HQgZTZsJWIKyvyteJdP2cOg__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA" type="video/mp4">
+    </video>
+    <div class="showcase-overlay"></div>
+    <div class="showcase-content h-full flex flex-col justify-end p-6 md:p-8">
+      <p class="text-gray-300 mb-4 max-w-lg">The story of two extraordinary men, Dr. Homi Jehangir Bhabha and Dr. Vikram Ambalal Sarabhai, who created history while building India's future.</p>
+    </div>
+  </section>
 
-    function closeModal() {
-      const video = document.getElementById('modal-video');
-      video.pause();
-      video.src = '';
-      document.getElementById('modal').classList.add('hidden');
-    }
+  <div class="flex overflow-x-auto mb-6 pb-2">
+    <div class="flex space-x-2">
+      <button class="season-btn active bg-yellow-600 text-black px-4 py-2 rounded-full" data-season="all">All Episodes</button>
+      <button class="season-btn bg-gray-800 px-4 py-2 rounded-full" data-season="1">Season 1</button>
+      <button class="season-btn bg-gray-800 px-4 py-2 rounded-full" data-season="2">Season 2</button>
+    </div>
+  </div>
 
-    // Auto-play the header video on mobile devices
-    document.addEventListener('DOMContentLoaded', function() {
-      const headerVideo = document.querySelector('.video-header video');
-      if (headerVideo) {
-        headerVideo.play().catch(e => {
-          console.log("Autoplay prevented, showing fallback");
-        });
-      }
-      loadSeason(1);
+
+
+  <section>
+    <h3 class="text-xl font-semibold mb-6"><i class="fas fa-list-ul text-yellow-500 mr-2"></i>Episodes</h3>
+    <div id="movies" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+  </section>
+</main>
+
+<footer class="bg-gray-900 border-t border-gray-800 mt-12 py-8 text-center text-gray-400">
+  © Rocket Boys Productions
+</footer>
+
+<!-- Playback Modal -->
+<div id="playback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90">
+  <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden">
+    <button id="close-modal" class="absolute top-4 right-4 text-white text-2xl">&times;</button>
+    <div class="video-container">
+      <video id="modal-video" class="w-full" controls></video>
+    </div>
+    <div class="p-6">
+      <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
+      <div id="season-episode" class="text-gray-400 text-sm mb-2"></div>
+      <div id="episode-duration" class="text-gray-400 text-sm mb-4"></div>
+      <p id="modal-description" class="text-gray-300"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========= EPISODE DATA =========
+const movies = [
+  // Season 1
+  {
+    title: "War and Peace",
+    video: "https://sipt.pavonilaboratories.cyou/v4/db/da6fg/index-f2-v1-a1.txt",        // ← insert link
+    image: "https://images.slivcdn.com/videoasset_images/rocketboysmain_landscape_image.jpg?h=398&w=708&q=high",        // ← insert image URL
+    description: "With the country at war, Dr. Homi Bhabha and Dr. Vikram Sarabhai are faced with a monumental conflict: Is war the only way to attain peace? At odds with one another, they look back at their lives and the story of how they met.",
+    duration: "",     // ← insert duration (mins)
+    season: 1,
+    episode: 1,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "It’s Like Gravity",
+    video: "https://spok.silverforgeindustries.store/v4/36/ovg16/cf-master.txt?v=1732102698",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep02_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "Homi and Vikram’s friendship grows, and an unexpected roadblock leads them to meet a few people who will alter the course of their lives.",
+    duration: "",
+    season: 1,
+    episode: 2,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "The Greater Good",
+    video: "https://smeb.mindspireeducation.cyou/v4/36/hjz3y/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep03_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "Homi and Vikram set out on their individual paths in hopes to achieve their dreams.",
+    duration: "",
+    season: 1,
+    episode: 3,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "A Tryst with Destiny",
+    video: "https://slob.ironbrookarchitecture.shop/v4/9a/6dvqb/cf-master.txt?v=1732102862",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep04_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "Emerging as an independent country, Homi and Vikram share their vision for the country. A new face comes to light while a threat lurks in the shadow.",
+    duration: "",
+    season: 1,
+    episode: 4,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "The Outsider",
+    video: "https://hk1.shegu.net/vip/p1/tv_mp4_h264/1/6/17206/1/tv.17206.S1E5.720p.H264.20220209083117.mp4?KEY1=qYPMhZ62oHJbDKuIV8kQyg&KEY2=1761971411&KEY3=1105681&KEY4=world&KEY7=febbox_video_quality_list_v3&KEY8=1105681",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep05_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "Homi and Vikram face a backlash both at personal and professional life.",
+    duration: "",
+    season: 1,
+    episode: 5,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "A Democratic Process",
+    video: "https://hk1.shegu.net/vip/p1/tv_mp4_h264/1/6/17206/1/tv.17206.S1E6.720p.H264.20220209083143.mp4?KEY1=XwRdBN1v7XuHGZwyJyMziQ&KEY2=1761971369&KEY3=1101256&KEY4=world&KEY7=febbox_video_quality_list_v3&KEY8=1101256",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep06_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "Their ideas and ambitions are challenged by a fierce rebellion. They must choose a path that they deem fit.",
+    duration: "",
+    season: 1,
+    episode: 6,
+    tags: ["Drama", "Politics"]
+  },
+  {
+    title: "We Are at War",
+    video: "https://scvo.stellarcreststudio.cyou/v4/36/go5qp/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep07_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "While India gets ready to take its first step in nuclear science, another dream gets into acceleration, but an impending war threatens to tear it all down.",
+    duration: "",
+    season: 1,
+    episode: 7,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "A New Dawn",
+    video: "https://s6p9.valenium.shop/v4/36/hjztj/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/landscape_thumb/show_original_rocketboys_ep08_Landscape_Thumb.jpg?h=398&w=708&q=high",
+    description: "The towering ambitions, the great sacrifices and the undeniable genius of these great men are put to test in a final showdown as the country emerges from the ravages of war.",
+    duration: "",
+    season: 1,
+    episode: 8,
+    tags: ["Drama", "History"]
+  },
+
+  // Season 2
+  {
+    title: "Lift Off",
+    video: "https://s6sy.satoriwellbeinglab.shop/v4/ic/mutjd/index-f1-v1-a1.txt",
+    image: "https://img.airtel.tv/unsafe/fit-in/495x0/filters:format(webp)/https://xstreamcp-assets-msp.streamready.in/assets/SONYLIV_VOD/EPISODE/6485d4be82488153bfe4ccd5/images/rocketboyss2_3_landscape_image.jpg?o=production",
+    description: "Dr Vikram Sarabhai prepares for a rocket launch, only to learn that the entire space programme might be in jeopardy. Meanwhile, Dr Homi Bhabha prepares to fight for his dreams but is forced to battle for his life.",
+    duration: "",
+    season: 2,
+    episode: 1,
+    tags: ["Drama", "Science"]
+  },
+  {
+    title: "Burden of Proof",
+    video: "https://sskt.valentrixinteractive.sbs/v4/db/ktxzz/cf-master.txt?v=1732102942",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_2_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "Vikram’s ambition falters prior to taking off. Mrinalini makes a daring move to assert her right as he tries to make progress. Homi’s deeds in the meantime drive the enemy to act.",
+    duration: "",
+    season: 2,
+    episode: 2,
+    tags: ["Drama", "Politics"]
+  },
+  {
+    title: "A Lasting Legacy",
+    video: "https://sxic.silverforgeindustries.store/v4/db/iracv/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_3_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "As political vultures close ranks, the nation experiences a severe loss and a change in power is organised. Vikram and Homi are compelled to choose a side. Would they continue to put their country before themselves in the face of an uncertain future?",
+    duration: "",
+    season: 2,
+    episode: 3,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "The Price of War",
+    video: "https://sxic.clarionworkshub.store/v4/36/ovgfi/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_4_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "Homi faces opposition on all fronts as he races against time, while Indira struggles to come out of her father’s enormous shadow. Meanwhile, Vikram and Mrinalini fight on the home front while the country faces the threat of a new war.",
+    duration: "",
+    season: 2,
+    episode: 4,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "Behind Enemy Lines",
+    video: "https://sunl.prismaticaeventworks.cfd/v4/db/j1hmk/cf-master.txt?v=1732103099",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_5_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "India’s nuclear future is on the line as Homi disregards caution and engages the adversary head-on. Meanwhile, Vikram contemplates forgiveness as the rift between him and Homi grows wider.",
+    duration: "",
+    season: 2,
+    episode: 5,
+    tags: ["Drama", "Politics"]
+  },
+  {
+    title: "Power Over Peace",
+    video: "https://sunl.bellavueartfoundation.store/v4/ox/x6aybl/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_6_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "Vikram assumes a new role that is directly opposed to all he holds dear. He is compelled to face the past and the truths hidden in it even as he has hope for the future.",
+    duration: "",
+    season: 2,
+    episode: 6,
+    tags: ["Drama", "Science"]
+  },
+  {
+    title: "The Last Guard",
+    video: "https://sskt.zenlithsustainables.cyou/v4/db/qfsgn/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_7_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "While Homi’s plans for the future of the nation’s nuclear programme begin to take shape, a wonderful new chapter in India’s satellite programme begins. But an unexpected tragedy upsets the balance.",
+    duration: "",
+    season: 2,
+    episode: 7,
+    tags: ["Drama", "History"]
+  },
+  {
+    title: "Smiling Buddha",
+    video: "https://slob.satoriwellbeinglab.shop/v4/9a/5gupa/index-f1-v1-a1.txt",
+    image: "https://images.slivcdn.com/videoasset_images/rocket_boys_2_8_landscap_thumb.jpg?h=398&w=708&q=high",
+    description: "In the greatest race against time, India and its scientists have just eight hours to accomplish an impossibly difficult task in the world’s greatest race against time.",
+    duration: "",
+    season: 2,
+    episode: 8,
+    tags: ["Drama", "History"]
+  }
+];
+
+
+
+/* ✅ Add Spy-Kids MP4 detector */
+function isMP4(url) {
+  return /\.mp4($|\?)/i.test(url);
+}
+
+/* DOM elements */
+const container = document.getElementById('movies');
+const playbackModal = document.getElementById('playback-modal');
+const modalVideo = document.getElementById('modal-video');
+const modalTitle = document.getElementById('modal-title');
+const modalDescription = document.getElementById('modal-description');
+const seasonEpisode = document.getElementById('season-episode');
+const episodeDuration = document.getElementById('episode-duration');
+const closeModal = document.getElementById('close-modal');
+
+let currentSeason = 'all';
+let currentFilter = 'All';
+
+function initPage() {
+  renderMovies();
+  document.querySelectorAll('.season-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelector('.season-btn.active').classList.remove('active', 'bg-yellow-600', 'text-black');
+      this.classList.add('active', 'bg-yellow-600', 'text-black');
+      currentSeason = this.dataset.season;
+      renderMovies();
     });
-  </script>
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelector('.filter-btn.active').classList.remove('active', 'bg-yellow-600', 'text-black');
+      this.classList.add('active', 'bg-yellow-600', 'text-black');
+      currentFilter = this.textContent;
+      renderMovies();
+    });
+  });
+}
+
+function renderMovies() {
+  container.innerHTML = '';
+  let filtered = movies;
+  if (currentSeason !== 'all') filtered = filtered.filter(m => m.season == currentSeason);
+  if (currentFilter !== 'All') filtered = filtered.filter(m => m.tags.includes(currentFilter));
+
+  filtered.forEach((movie, i) => {
+    const card = document.createElement('div');
+    card.className = `movie-card fade-in delay-${i%5} glow-effect`;
+    card.innerHTML = `
+      <div class="relative group cursor-pointer overflow-hidden rounded-xl">
+        <img src="${movie.image}" class="w-full h-48 object-cover rounded-xl transition group-hover:scale-105">
+        <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-yellow-500 text-3xl"><i class="fas fa-play"></i></div>
+      </div>
+      <div class="mt-3 text-white font-medium">${movie.title}</div>
+      <div class="text-gray-400 text-sm">S${movie.season} • E${movie.episode} • ${movie.duration}</div>
+    `;
+
+    /* ✅ Spy-Kids logic applied */
+    card.addEventListener('click', () => {
+      if (isMP4(movie.video)) {
+        openModal(movie);
+      } else {
+        window.location.href =
+          `player.html?title=${encodeURIComponent(movie.title)}&video=${encodeURIComponent(movie.video)}`;
+      }
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function openModal(m) {
+  modalTitle.textContent = m.title;
+  modalDescription.textContent = m.description;
+  seasonEpisode.textContent = `S${m.season} • E${m.episode}`;
+  episodeDuration.textContent = m.duration;
+  modalVideo.src = m.video;
+  playbackModal.classList.remove('hidden');
+}
+
+closeModal.onclick = () => { playbackModal.classList.add('hidden'); modalVideo.pause(); };
+
+window.addEventListener('DOMContentLoaded', initPage);
+</script>
+
 </body>
 </html>
